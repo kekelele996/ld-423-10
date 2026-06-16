@@ -45,6 +45,7 @@ export const ChartEditor = () => {
                   datasetId: nextDataset.id,
                   xField: nextDataset.columns[0]?.name ?? '',
                   yField: numeric?.name ?? nextDataset.columns[1]?.name ?? '',
+                  groupField: undefined,
                 });
               }
             }}
