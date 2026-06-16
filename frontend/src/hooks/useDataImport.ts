@@ -9,7 +9,8 @@ export const useDataImport = () => {
     setError(null);
     try {
       const text = await file.text();
-      const rows = file.name.endsWith('.json') ? parseJsonRows(text) : await parseCsv(text);
+      const isJson = /\.json$/i.test(file.name);
+      const rows = isJson ? parseJsonRows(text) : await parseCsv(text);
       const dataset: Dataset = {
         id: crypto.randomUUID(),
         name: file.name.replace(/\.(csv|json)$/i, ''),

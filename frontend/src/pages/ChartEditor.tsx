@@ -19,8 +19,10 @@ export const ChartEditor = () => {
   const errors = useMemo(() => (config ? validateConfig(config) : []), [config, validateConfig]);
 
   useEffect(() => {
-    if (!config && suggestedConfig) setConfig(suggestedConfig);
-  }, [config, suggestedConfig]);
+    if (suggestedConfig && (!config || config.datasetId !== suggestedConfig.datasetId)) {
+      setConfig(suggestedConfig);
+    }
+  }, [suggestedConfig]);
 
   if (!config || !dataset) return null;
 
@@ -36,7 +38,15 @@ export const ChartEditor = () => {
             onChange={(event) => {
               selectDataset(event.target.value);
               const nextDataset = datasets.find((candidate) => candidate.id === event.target.value);
-              if (nextDataset) setConfig({ ...config, datasetId: nextDataset.id, xField: dataset.columns[0]?.name ?? '', yField: dataset.columns[1]?.name ?? '' });
+              if (nextDataset) {
+                const numeric = nextDataset.columns.find((column) => column.type === 'Number');
+                setConfig({
+                  ...config,
+                  datasetId: nextDataset.id,
+                  xField: nextDataset.columns[0]?.name ?? '',
+                  yField: numeric?.name ?? nextDataset.columns[1]?.name ?? '',
+                });
+              }
             }}
           >
             {datasets.map((candidate) => <option key={candidate.id} value={candidate.id}>{candidate.name}</option>)}

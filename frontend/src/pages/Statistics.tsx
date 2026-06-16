@@ -14,7 +14,7 @@ export const Statistics = () => {
   const summary = useMemo(() => calculateStatSummary(dataset.id, dataset.data, field), [dataset, field]);
   const matrixRows = numericColumns.map((column) => ({
     field: column.name,
-    ...Object.fromEntries(numericColumns.map((other) => [other.name, Number(correlation(dataset.data, field, other.name).toFixed(3))])),
+    ...Object.fromEntries(numericColumns.map((other) => [other.name, Number(correlation(dataset.data, column.name, other.name).toFixed(3))])),
   }));
 
   return (
